@@ -1,0 +1,57 @@
+services:
+  mongo1:
+    image: mongo:7.0
+    container_name: mongo1
+    command: mongod --replSet rs0 --bind_ip_all --port 27017
+    ports:
+      - "27017:27017"
+    networks:
+      - mongo-cluster
+    volumes:
+      - mongo1-data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongo2:
+    image: mongo:7.0
+    container_name: mongo2
+    command: mongod --replSet rs0 --bind_ip_all --port 27018
+    ports:
+      - "27018:27018"
+    networks:
+      - mongo-cluster
+    volumes:
+      - mongo2-data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27018/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongo3:
+    image: mongo:7.0
+    container_name: mongo3
+    command: mongod --replSet rs0 --bind_ip_all --port 27019
+    ports:
+      - "27019:27019"
+    networks:
+      - mongo-cluster
+    volumes:
+      - mongo3-data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27019/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  mongo-cluster:
+    driver: bridge
+
+volumes:
+  mongo1-data:
+  mongo2-data:
+  mongo3-data:
