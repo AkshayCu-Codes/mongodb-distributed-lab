@@ -10,25 +10,29 @@ This lab project provides practical experience with MongoDB's distributed system
 Diagram 1: MongoDB Replica Set Architecture
 ```mermaid
 graph TB
-    subgraph "MongoDB Replica Set Architecture"
-        Client[Client Application]
-        
-        subgraph "Replica Set: rs0"
-            Primary[("PRIMARY<br/>mongo1:27017<br/>172.18.0.4")]
-            Secondary1[("SECONDARY<br/>mongo2:27018<br/>172.18.0.3")]
-            Secondary2[("SECONDARY<br/>mongo3:27019<br/>172.18.0.2")]
-        end
-        
-        Client -->|Writes| Primary
-        Client -.->|Reads<br/>(optional)| Secondary1
-        Client -.->|Reads<br/>(optional)| Secondary2
-        
-        Primary ==>|Async Replication<br/>via Oplog| Secondary1
-        Primary ==>|Async Replication<br/>via Oplog| Secondary2
-        
-        Secondary1 -.->|Heartbeat| Primary
-        Secondary2 -.->|Heartbeat| Primary
+    Client[Client Application]
+    
+    subgraph Cluster["Replica Set: rs0"]
+        Primary["PRIMARY
+        mongo1:27017
+        172.18.0.4"]
+        Secondary1["SECONDARY
+        mongo2:27018
+        172.18.0.3"]
+        Secondary2["SECONDARY
+        mongo3:27019
+        172.18.0.2"]
     end
+    
+    Client -->|Writes| Primary
+    Client -.->|Reads optional| Secondary1
+    Client -.->|Reads optional| Secondary2
+    
+    Primary ==>|Async Replication via Oplog| Secondary1
+    Primary ==>|Async Replication via Oplog| Secondary2
+    
+    Secondary1 -.->|Heartbeat| Primary
+    Secondary2 -.->|Heartbeat| Primary
     
     style Primary fill:#4CAF50,stroke:#2E7D32,stroke-width:3px,color:#fff
     style Secondary1 fill:#2196F3,stroke:#1565C0,stroke-width:2px,color:#fff
