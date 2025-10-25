@@ -8,7 +8,8 @@ This lab project provides practical experience with MongoDB's distributed system
 ---
 📊 Architecture Diagrams
 Diagram 1: MongoDB Replica Set Architecture
-mermaidgraph TB
+```mermaid
+graph TB
     subgraph "MongoDB Replica Set Architecture"
         Client[Client Application]
         
@@ -33,6 +34,7 @@ mermaidgraph TB
     style Secondary1 fill:#2196F3,stroke:#1565C0,stroke-width:2px,color:#fff
     style Secondary2 fill:#2196F3,stroke:#1565C0,stroke-width:2px,color:#fff
     style Client fill:#FF9800,stroke:#E65100,stroke-width:2px,color:#fff
+```
 ## 📁 Lab Structure
 ```
 mongodb-distributed-lab/
