@@ -95,7 +95,7 @@ sequenceDiagram
     M1->>C: Acknowledge
     
     Note over M1: PRIMARY FAILS
-    rect rgb(255, 200, 200)
+    rect rgba(238, 19, 19, 1)
         M1--xM2: Heartbeat Timeout
         M1--xM3: Heartbeat Timeout
     end
@@ -105,7 +105,7 @@ sequenceDiagram
     M3->>M2: Grant Vote
     
     Note over M2: NEW PRIMARY ELECTED
-    rect rgb(200, 255, 200)
+    rect rgba(28, 231, 28, 1)
         M2->>M2: Become PRIMARY
         C->>M2: Write Request
         M2->>M3: Replicate
@@ -118,96 +118,7 @@ sequenceDiagram
     M1->>M1: Become SECONDARY
 ```
 
-### Diagram 4: Write Concern Levels
-```mermaid
-graph TB
-    subgraph W1["Write Concern: w=1"]
-        Client1[Client Write]
-        P1[PRIMARY]
-        S1a[SECONDARY]
-        S1b[SECONDARY]
-        
-        Client1 -->|1. Write| P1
-        P1 -.->|2. Async Replicate| S1a
-        P1 -.->|2. Async Replicate| S1b
-        P1 -->|ACK Immediately| Client1
-    end
-    
-    subgraph W2["Write Concern: w=majority"]
-        Client2[Client Write]
-        P2[PRIMARY]
-        S2a[SECONDARY]
-        S2b[SECONDARY]
-        
-        Client2 -->|1. Write| P2
-        P2 -->|2. Replicate| S2a
-        P2 -.->|2. Replicate| S2b
-        S2a -->|3. Confirm| P2
-        P2 -->|ACK After Majority| Client2
-    end
-    
-    subgraph W3["Write Concern: w=3"]
-        Client3[Client Write]
-        P3[PRIMARY]
-        S3a[SECONDARY]
-        S3b[SECONDARY]
-        
-        Client3 -->|1. Write| P3
-        P3 -->|2. Replicate| S3a
-        P3 -->|2. Replicate| S3b
-        S3a -->|3. Confirm| P3
-        S3b -->|3. Confirm| P3
-        P3 -->|ACK After All| Client3
-    end
-    
-    style P1 fill:#4CAF50,stroke:#2E7D32,stroke-width:2px
-    style P2 fill:#4CAF50,stroke:#2E7D32,stroke-width:2px
-    style P3 fill:#4CAF50,stroke:#2E7D32,stroke-width:2px
-```
-### Diagram 5: ACID vs Saga Pattern
-```mermaid
-graph TB
-    subgraph ACID["ACID Transaction"]
-        A1[Start Transaction]
-        A2[Deduct Inventory]
-        A3[Create Order]
-        A4[Process Payment]
-        A5[Update User]
-        A6{All Success?}
-        A7[Commit All]
-        A8[Rollback All]
-        
-        A1 --> A2 --> A3 --> A4 --> A5 --> A6
-        A6 -->|Yes| A7
-        A6 -->|No| A8
-    end
-    
-    subgraph SAGA["Saga Pattern"]
-        S1[Reserve Inventory]
-        S2[Create Order]
-        S3[Process Payment]
-        S4[Update User]
-        S5{Step Failed?}
-        
-        C1[Compensate: Release Inventory]
-        C2[Compensate: Cancel Order]
-        C3[Compensate: Refund Payment]
-        C4[Compensate: Revert User]
-        
-        S1 --> S2 --> S3 --> S4 --> S5
-        S5 -->|Yes| C4 --> C3 --> C2 --> C1
-        S5 -->|No| Done[Complete]
-    end
-    
-    style A7 fill:#4CAF50,stroke:#2E7D32,stroke-width:2px
-    style A8 fill:#f44336,stroke:#c62828,stroke-width:2px
-    style Done fill:#4CAF50,stroke:#2E7D32,stroke-width:2px
-    style C1 fill:#FF9800,stroke:#E65100,stroke-width:2px
-    style C2 fill:#FF9800,stroke:#E65100,stroke-width:2px
-    style C3 fill:#FF9800,stroke:#E65100,stroke-width:2px
-    style C4 fill:#FF9800,stroke:#E65100,stroke-width:2px
-```
-### Diagram 6: Lab Experiment Flow
+### Diagram 4: Lab Experiment Flow
 ```mermaid
 graph LR
     Setup["Setup
