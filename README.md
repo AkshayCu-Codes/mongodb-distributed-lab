@@ -6,7 +6,33 @@ A comprehensive hands-on laboratory project demonstrating distributed database c
 This lab project provides practical experience with MongoDB's distributed systems capabilities through four comprehensive experiments exploring replication strategies, consistency models, transaction patterns, and real-time monitoring of replica set health.
 
 ---
-
+📊 Architecture Diagrams
+Diagram 1: MongoDB Replica Set Architecture
+mermaidgraph TB
+    subgraph "MongoDB Replica Set Architecture"
+        Client[Client Application]
+        
+        subgraph "Replica Set: rs0"
+            Primary[("PRIMARY<br/>mongo1:27017<br/>172.18.0.4")]
+            Secondary1[("SECONDARY<br/>mongo2:27018<br/>172.18.0.3")]
+            Secondary2[("SECONDARY<br/>mongo3:27019<br/>172.18.0.2")]
+        end
+        
+        Client -->|Writes| Primary
+        Client -.->|Reads<br/>(optional)| Secondary1
+        Client -.->|Reads<br/>(optional)| Secondary2
+        
+        Primary ==>|Async Replication<br/>via Oplog| Secondary1
+        Primary ==>|Async Replication<br/>via Oplog| Secondary2
+        
+        Secondary1 -.->|Heartbeat| Primary
+        Secondary2 -.->|Heartbeat| Primary
+    end
+    
+    style Primary fill:#4CAF50,stroke:#2E7D32,stroke-width:3px,color:#fff
+    style Secondary1 fill:#2196F3,stroke:#1565C0,stroke-width:2px,color:#fff
+    style Secondary2 fill:#2196F3,stroke:#1565C0,stroke-width:2px,color:#fff
+    style Client fill:#FF9800,stroke:#E65100,stroke-width:2px,color:#fff
 ## 📁 Lab Structure
 ```
 mongodb-distributed-lab/
